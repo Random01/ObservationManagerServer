@@ -5,25 +5,22 @@ const bodyParser = require('body-parser')
 const express = require('express');
 const app = express();
 const port = 3000;
+const db = require('./config/db');
+const routes = require('./routes');
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
-const routes = require('./routes');
-routes(app, {});
-//require('./routes')(app, {});
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
-let db;
-
-MongoClient.connect('mongodb://TestUser:Ht98pkrs@ds111876.mlab.com:11876/my-test-database', (err, database) => {
+MongoClient.connect(db.url, (err, database) => {
     if (err) {
         return console.log(err);
     }
 
-    db = database;
+    routes(app, database);
+
     app.listen(port, () => {
         console.log('listening on ' + port);
     });
