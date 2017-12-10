@@ -27,11 +27,11 @@ ScopeService.prototype.getById = function(id) {
 
 ScopeService.prototype.insert = function(scope) {
     return new Promise((resolve, reject) => {
-        this.db.collection('notes').insert(note, (err, result) => {
-            if (err) { 
-                res.send({ 'error': 'An error has occurred' }); 
+        this.db.collection('notes').insert(scope, (err, result) => {
+            if (err) {
+                reject({ 'error': 'An error has occurred' }); 
               } else {
-                res.send(result.ops[0]);
+                resolve(result.ops[0]);
               }
         });
     });
